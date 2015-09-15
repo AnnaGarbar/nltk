@@ -4,6 +4,7 @@
 # Author: Will Zhang <wilzzha@gmail.com>
 #         Guan Gui <ggui@student.unimelb.edu.au>
 #         Steven Bird <stevenbird1@gmail.com>
+#         Anna Gabar <anna.garbar@gmail.com>
 # URL: <http://nltk.org/>
 # For license information, see LICENSE.TXT
 
@@ -336,7 +337,22 @@ class Alignment(frozenset):
         self._index = [[] for _ in range(self._len + 1)]
         for p in self:
             self._index[p[0]].append(p)
+    
+    @classmethod
+    def fromstring(cls, s):
+        """
+        Read a giza-formatted string and return an Alignment object.
 
+            >>> Alignment.fromstring('0-0 2-1 9-2 21-3 10-4 7-5')
+            Alignment([(0, 0), (2, 1), (7, 5), (9, 2), (10, 4), (21, 3)])
+
+        :type s: str
+        :param s: the positional alignments in giza format
+        :rtype: Alignment
+        :return: An Alignment object corresponding to the string representation ``s``.
+        """
+
+        return Alignment([_giza2pair(a) for a in s.split()])
 
 def _giza2pair(pair_string):
     i, j = pair_string.split("-")
